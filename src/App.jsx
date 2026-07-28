@@ -10,17 +10,20 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [darkMode, setDarkMode] = useState(true);
-  const [history, setHistory] = useState([]);
+
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : true;
+  });
+
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem('searchHistory');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const inputRef = useRef(null);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme) setDarkMode(JSON.parse(savedTheme));
-
-    const savedHistory = localStorage.getItem('searchHistory');
-    if (savedHistory) setHistory(JSON.parse(savedHistory));
-
     inputRef.current?.focus();
   }, []);
 
@@ -28,12 +31,17 @@ function App() {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
 
+  useEffect(() => {
+    localStorage.setItem('searchHistory', JSON.stringify(history));
+  }, [history]);
+
   const saveToHistory = (cityName) => {
     setHistory((prev) => {
-      const updated = [cityName, ...prev.filter((c) => c.toLowerCase() !== cityName.toLowerCase())];
-      const trimmed = updated.slice(0, MAX_HISTORY);
-      localStorage.setItem('searchHistory', JSON.stringify(trimmed));
-      return trimmed;
+      const updated = [
+        cityName,
+        ...prev.filter((c) => c.toLowerCase() !== cityName.toLowerCase()),
+      ];
+      return updated.slice(0, MAX_HISTORY);
     });
   };
 
@@ -45,19 +53,27 @@ function App() {
 
     try {
       const geoResponse = await fetch(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityName)}&limit=1&appid=${API_KEY}`
+        `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
+          cityName
+        )}&limit=1&appid=${API_KEY}`
       );
-      if (!geoResponse.ok) throw new Error(`Geo API error! Status: ${geoResponse.status}`);
+
+      if (!geoResponse.ok)
+        throw new Error(`Geo API error! Status: ${geoResponse.status}`);
 
       const geoData = await geoResponse.json();
-      if (geoData.length === 0) throw new Error(`No location found for "${cityName}"`);
+
+      if (geoData.length === 0)
+        throw new Error(`No location found for "${cityName}"`);
 
       const { lat, lon, name, country } = geoData[0];
 
       const weatherResponse = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
       );
-      if (!weatherResponse.ok) throw new Error(`Weather API error! Status: ${weatherResponse.status}`);
+
+      if (!weatherResponse.ok)
+        throw new Error(`Weather API error! Status: ${weatherResponse.status}`);
 
       const weatherData = await weatherResponse.json();
 
@@ -74,10 +90,15 @@ function App() {
       const forecastResponse = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
       );
-      if (!forecastResponse.ok) throw new Error(`Forecast API error! Status: ${forecastResponse.status}`);
+
+      if (!forecastResponse.ok)
+        throw new Error(`Forecast API error! Status: ${forecastResponse.status}`);
 
       const forecastData = await forecastResponse.json();
-      const daily = forecastData.list.filter((entry) => entry.dt_txt.includes('12:00:00'));
+
+      const daily = forecastData.list.filter((entry) =>
+        entry.dt_txt.includes('12:00:00')
+      );
 
       setForecast(
         daily.map((entry) => ({
@@ -112,12 +133,15 @@ function App() {
   };
 
   return (
-    <div className={darkMode ? 'app dark' : 'app'} onClick={() => inputRef.current?.focus()}>
+    <div
+      className={darkMode ? 'app dark' : 'app'}
+      onClick={() => inputRef.current?.focus()}
+    >
       <button
         className="theme-toggle"
         onClick={(e) => {
           e.stopPropagation();
-          setDarkMode(!darkMode);
+          setDarkMode((prev) => !prev);
         }}
       >
         {darkMode ? '☀' : '☾'}
@@ -140,29 +164,42 @@ function App() {
 
         {weather && (
           <div className="weather-block">
-            <p className="w-location">{weather.city}, {weather.country}</p>
+            <p className="w-location">
+              {weather.city}, {weather.country}
+            </p>
+
             <div className="w-main">
               <img
                 src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
                 alt={weather.description}
               />
-              <span className="w-temp">{Math.round(weather.temp)}°</span>
+              <span className="w-temp">
+                {Math.round(weather.temp)}°
+              </span>
             </div>
+
             <p className="w-desc">{weather.description}</p>
-            <p className="w-details">humidity {weather.humidity}% · wind {weather.windSpeed} m/s</p>
+
+            <p className="w-details">
+              humidity {weather.humidity}% · wind {weather.windSpeed} m/s
+            </p>
           </div>
         )}
 
         {forecast.length > 0 && (
           <div className="forecast">
-            {forecast.map((day, i) => (
-              <div key={i} className="forecast-day">
+            {forecast.map((day) => (
+              <div key={day.date} className="forecast-day">
                 <p className="f-date">{day.date}</p>
+
                 <img
                   src={`https://openweathermap.org/img/wn/${day.icon}.png`}
                   alt={day.description}
                 />
-                <p className="f-temp">{Math.round(day.temp)}°</p>
+
+                <p className="f-temp">
+                  {Math.round(day.temp)}°
+                </p>
               </div>
             ))}
           </div>
