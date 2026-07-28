@@ -23,17 +23,12 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: weather-app-build
           path: dist
-
-      ##################################################
-      # Deploy to Cloudflare
-      ##################################################
-
-      # - name: Deploy to Cloudflare Pages
-      #   uses: cloudflare/wrangler-action@v3
-      #   with:
-      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      #     accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      #     command: pages deploy dist --project-name YOUR_PROJECT_NAME
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+           command: pages deploy dist --project-name vatavaranam
 
       ##################################################
       # Deploy to Vercel
