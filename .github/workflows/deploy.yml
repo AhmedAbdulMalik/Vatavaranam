@@ -30,20 +30,18 @@ jobs:
            accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
            command: pages deploy dist --project-name vatavaranam
 
-      ##################################################
-      # Deploy to Vercel
-      ##################################################
+     
 
-      # - name: Deploy to Vercel
-      #   run: |
-      #     npx vercel deploy \
-      #       --prod \
-      #       --prebuilt \
-      #       --yes \
-      #       --token=${{ secrets.VERCEL_TOKEN }}
-      #   env:
-      #     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      - name: Deploy to Vercel
+        run: |
+           npx vercel deploy \
+             --prod \
+             --prebuilt \
+             --yes \
+             --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       ##################################################
       # Deploy to AWS Amplify
