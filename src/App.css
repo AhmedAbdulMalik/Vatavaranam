@@ -1,0 +1,164 @@
+.app {
+  min-height: 100vh;
+  background: #fdfdfb;
+  color: #1a1a1a;
+  cursor: text;
+  transition: background 0.3s, color 0.3s;
+  position: relative;
+}
+
+.app.dark {
+  background: #141414;
+  color: #e8e8e6;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.5;
+}
+
+.theme-toggle:hover {
+  opacity: 1;
+}
+
+.canvas {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 15vh 24px 60px;
+}
+
+.thought-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Lato', system-ui, sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: inherit;
+  caret-color: currentColor;
+}
+
+.thought-input::placeholder {
+  color: inherit;
+  opacity: 0.35;
+}
+
+.status {
+  margin-top: 40px;
+  font-size: 18px;
+  opacity: 0.5;
+  font-weight: 300;
+}
+
+.status.error {
+  opacity: 0.8;
+  color: #b3453d;
+}
+
+.weather-block {
+  margin-top: 50px;
+  animation: fadeIn 0.4s ease;
+}
+
+.w-location {
+  font-size: 18px;
+  opacity: 0.5;
+  margin: 0 0 8px;
+  font-weight: 300;
+}
+
+.w-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.w-main img {
+  width: 70px;
+  height: 70px;
+}
+
+.w-temp {
+  font-size: 56px;
+  font-weight: 200;
+}
+
+.w-desc {
+  font-size: 18px;
+  text-transform: capitalize;
+  opacity: 0.6;
+  margin: 4px 0;
+  font-weight: 300;
+}
+
+.w-details {
+  font-size: 15px;
+  opacity: 0.45;
+  font-weight: 300;
+}
+
+.forecast {
+  display: flex;
+  gap: 24px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.forecast-day {
+  text-align: center;
+  opacity: 0.7;
+}
+
+.forecast-day img {
+  width: 36px;
+  height: 36px;
+}
+
+.f-date {
+  font-size: 13px;
+  opacity: 0.6;
+  margin: 0;
+  font-weight: 300;
+}
+
+.f-temp {
+  font-size: 16px;
+  margin: 2px 0 0;
+  font-weight: 300;
+}
+
+.history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 50px;
+}
+
+.history-chip {
+  border: none;
+  background: none;
+  font-size: 14px;
+  opacity: 0.4;
+  cursor: pointer;
+  color: inherit;
+  padding: 4px 0;
+  font-weight: 300;
+  border-bottom: 1px solid currentColor;
+}
+
+.history-chip:hover {
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
