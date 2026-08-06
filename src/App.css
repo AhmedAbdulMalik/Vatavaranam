@@ -39,6 +39,8 @@
   border: none;
   background: transparent;
   outline: none;
+  border: solid white 1px;
+  border-radius: 5px;
   font-family: monospace;
   font-size: 28px;
   font-weight: 300;
