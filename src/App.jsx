@@ -155,7 +155,7 @@ function App() {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="enter city name"
+          placeholder="Where do you live?"
           autoFocus
         />
 
